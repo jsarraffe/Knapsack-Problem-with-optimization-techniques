@@ -29,9 +29,9 @@ values = [0]
 weights = [0]
 
 
-readFile('p03_c.txt', capacity)
-readFile('p03_v.txt', values)
-readFile('p03_w.txt', weights)
+readFile('p08_c.txt', capacity)
+readFile('p08_v.txt', values)
+readFile('p08_w.txt', weights)
 
 
 def makeTuple(list1, list2, list3):
