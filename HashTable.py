@@ -1,16 +1,17 @@
 import math
-
-
+from decimal import Decimal
 class HshTable:
     def __init__(self, n, W):
         self.n = n
         self.W = W
-        self.k = (self.W + 1) / 2
+        self.k = int((((self.W + 1)/2) * n/2))
         self.table = [None] * int(self.k)
 
+
+#2021626
     def hash(self, i, j):
-        Ri = '1' + format(i, "b").zfill(self.n)
-        Rj = format(j, "b").zfill(self.W)
+        Ri = '1' + format(i, "b").zfill(int(math.log2(self.n + 1)))
+        Rj = format(j, "b").zfill(int(math.log2(self.W + 1)))
         hashIndex = int(Ri + Rj) % self.k
         return hashIndex
 
@@ -29,14 +30,15 @@ class HshTable:
     def find(self, i, j):
         index = int(self.hash(i, j))
 
+
+
         node = self.table[index]
         while node is not None and (node.i != i or node.j != j):
             node = node.next
         if node is None:
-            return 0
+            return Node(0,0,0)
         else:
-            return node.v
-
+            return node
 
 class Node:
     def __init__(self, i, j, v):
@@ -44,3 +46,5 @@ class Node:
         self.j = j
         self.v = v
         self.next = None
+        self.isIn = False
+
