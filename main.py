@@ -2,14 +2,12 @@ import matplotlib.pyplot as plt
 
 import time
 
-
 from HashTable import HshTable
 
 from Greedy import SackNode
 from HashTable import Node
 
 from Heap import MaxHeap
-
 
 
 # plt.plot([1,2,3,4])
@@ -30,12 +28,9 @@ capacity = []
 values = [0]
 weights = [0]
 
-
-readFile('p02_c.txt', capacity)
-readFile('p02_v.txt', values)
-readFile('p02_w.txt', weights)
-
-
+readFile('p00_c.txt', capacity)
+readFile('p00_v.txt', values)
+readFile('p00_w.txt', weights)
 
 oneAtable = [[0 for j in range(capacity[0] + 1)] for i in range(1, len(values) + 1)]
 oneBTable = [[0 for j in range(capacity[0] + 1)] for i in range(1, len(values) + 1)]
@@ -81,6 +76,7 @@ def knapsack():
 # ------------------------------------GLOBAL VARIABLES----------------------------------
 
 basicOperation1b = 0
+
 
 # --------------------------------------------------------------------------------------
 def MFKnapsack(i, j):
@@ -153,7 +149,6 @@ def MFKnapsackHASH(i, j):
 #
 
 
-
 def oneCKnapSack():
     global basicOperation1c
     global hash
@@ -196,11 +191,8 @@ startB = time.time()
 oneB, oneBVal, basicOp1B = oneBKnapSack()
 endB = time.time()
 
-
-
 print("Knapsack Capcity = " + str(capacity[0]) + ". Total number of items = " + str(len(values) - 1))
 print("")
-
 
 print("TIME TO COMPILE  A: " + str(endA - startA))
 
@@ -215,7 +207,6 @@ print("(1b) Traditional Dynamic Programming Optimal value: " + str(oneBVal))
 print("(1b) Traditional Dynamic Programming Optimal subset: {" + str(oneB)[1:-1] + "}")
 print("(1b) Traditional Dynamic Programming Total Basic Ops: " + str(basicOp1B))
 
-
 print("")
 print("TIME TO COMPILE  C: " + str(endC - startC))
 print("(1c) Traditional Dynamic Programming Optimal value: " + str(oneCVal))
@@ -225,8 +216,7 @@ print("(1c) Space-efficient Dynamic Programming Space Taken: " + str(oneCSpace[0
       + str(oneCSpace[1]) + " open spaces in hash table")
 
 
-
-#Paremeter gnskVals : greetyKnapSackValues
+# Paremeter gnskVals : greetyKnapSackValues
 def mergesort(gnskVals):
     if len(gnskVals) < 2:
         return
@@ -259,12 +249,10 @@ def mergesort(gnskVals):
         j += 1
 
 
-
-
-
 # -------------Greedy Algorithms---------------------------------
 
 sackValues = []
+
 
 # --------------------------------------------------------
 def grdyNAPSK():
@@ -274,7 +262,7 @@ def grdyNAPSK():
         newNode = SackNode(values[i], weights[i], i, values[i] / weights[i])
         greedyKnapSackValues.append(newNode)
 
-    #save for heep based
+    # save for heep based
     sackValues = greedyKnapSackValues.copy()
     mergesort(greedyKnapSackValues)
     greedyKnapSackValues = greedyKnapSackValues[::-1]
@@ -283,7 +271,7 @@ def grdyNAPSK():
     currCapcity = 0
     knapVal = 0
     for i in range(len(greedyKnapSackValues)):
-        if currCapcity +greedyKnapSackValues[i].weight < capacity[0]:
+        if currCapcity + greedyKnapSackValues[i].weight < capacity[0]:
             answer.append(greedyKnapSackValues[i].itemNum)
             currCapcity += greedyKnapSackValues[i].weight
             knapVal += greedyKnapSackValues[i].value
@@ -292,6 +280,7 @@ def grdyNAPSK():
             break
     return answer, knapVal
 
+
 twoA, knapVal2A = grdyNAPSK()
 
 
@@ -299,71 +288,61 @@ def print2AContributers():
     global twoA
     ans = ""
     for i in range(len(twoA)):
-        if(i < len(twoA) - 1):
+        if (i < len(twoA) - 1):
             ans += str(twoA[i]) + ", "
         else:
             ans += str(twoA[i]) + ""
     return " {" + ans + "}"
 
 
-
 def sift(sackNode):
     print("sackNOde")
 
-def heapify(sackValues):
 
+def heapify(sackValues):
     print("arsehole")
+
 
 def greedyHeap():
     global sackValues
 
-
     '''
-        
+
        1: heapify
        2: delete max, the sift down,  switch with the last node in array, then delete last node, then sift
-    
+
     '''
 
 
 print(" ")
 
-
-
-
 greedyHeap()
 print("(2a) Greedy Approach Optimal value: " + str(knapVal2A))
 print("(2a) Greedy Approach Optimal value:" + print2AContributers())
 
-
 print('')
 
+# array = [7.0, 3.0, 9.0, 12.0, 6.0, 31.0, 2.0]
 
-array = [7.0, 3.0, 9.0, 12.0, 6.0, 31.0, 2.0]
 
-# for i in range(len(array)-1, -1, -1):
-#     print(array[i])
+nodesToDeleteFrom = {}
+heap = []
+for i in sackValues:
+    heap.append(round((i.bangForBuckRatio),2))
+    n = {i.bangForBuckRatio : i}
+    nodesToDeleteFrom.update(n)
 
-#
-mH = MaxHeap(array, len(array), len(array))
+print(heap)
+array = heap
 
+greedNodes = sackValues.copy()
+
+mH = MaxHeap(array, len(array))
 mH.heapification()
 
-mH.deleteMax()
 
 print(array)
+
+
 #
 # print(array)
-
-
-
-
-
-
-
-
-
-
-
-
-

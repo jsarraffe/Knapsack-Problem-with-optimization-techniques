@@ -1,9 +1,7 @@
 
-    answer = []
-    currCapcity = 0
-    knapVal = 0
-    for i in greedyKnapSackValues:
-        if currCapcity +i.weight <= capacity[0]:
-            answer.append(i.itemNum)
-            currCapcity += i.weight
-            knapVal += i.value
+nodesToDeleteFrom = {}
+heap = []
+for i in sackValuesForHeap:
+    heap.append(round((i.bangForBuckRatio),2))
+    n = {i.bangForBuckRatio : i}
+    nodesToDeleteFrom.update(n)
