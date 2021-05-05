@@ -4,7 +4,7 @@ class HshTable:
     def __init__(self, n, W):
         self.n = n
         self.W = W
-        self.k = int((((self.W + 1)/2) * n/2))
+        self.k = int((((self.W + 1)*0.8) / n))
         self.table = [None] * int(self.k)
 
 
@@ -17,6 +17,8 @@ class HshTable:
 
     def insert(self, Node):
         index = int(self.hash(Node.i, Node.j))
+        if(Node.isIn):
+            return
         node = self.table[index]
         if node == None:
             self.table[index] = Node
@@ -28,8 +30,10 @@ class HshTable:
         prev.next = Node
 
     def find(self, i, j):
-        index = int(self.hash(i, j))
 
+
+
+        index = int(self.hash(i, j))
 
 
         node = self.table[index]
@@ -47,4 +51,3 @@ class Node:
         self.v = v
         self.next = None
         self.isIn = False
-

@@ -8,6 +8,8 @@ from HashTable import HshTable
 from Greedy import SackNode
 from HashTable import Node
 
+from Heap import MaxHeap
+
 
 
 # plt.plot([1,2,3,4])
@@ -29,14 +31,10 @@ values = [0]
 weights = [0]
 
 
-readFile('p08_c.txt', capacity)
-readFile('p08_v.txt', values)
-readFile('p08_w.txt', weights)
+readFile('p02_c.txt', capacity)
+readFile('p02_v.txt', values)
+readFile('p02_w.txt', weights)
 
-
-def makeTuple(list1, list2, list3):
-    ksTuple = tuple((list1, list2, list3))
-    return ksTuple
 
 
 oneAtable = [[0 for j in range(capacity[0] + 1)] for i in range(1, len(values) + 1)]
@@ -56,7 +54,6 @@ def knapsack():
     global capacity
     basicOperation1A = 0
     for i in range(1, len(values)):
-
         for j in range(1, capacity[0] + 1):
             basicOperation1A += 1
             if j - weights[i] < 0:
@@ -88,6 +85,7 @@ basicOperation1b = 0
 # --------------------------------------------------------------------------------------
 def MFKnapsack(i, j):
     global basicOperation1b
+    global oneBTable
 
     if oneBTable[i][j] < 0:
         basicOperation1b += 1
@@ -128,7 +126,7 @@ def oneBKnapSack():
 
 # -------------------------------------Global Variables --------------------------------------
 
-basicOperation1c = 0
+basicOperation1c = 1
 spaceTaken = 0
 hash = HshTable(len(values) - 1, capacity[0])
 val = 0
@@ -140,20 +138,20 @@ def MFKnapsackHASH(i, j):
     global basicOperation1c
     global hash
     global spaceTaken
-    if i > 0 and j > 0:
+    if i > 0:
         basicOperation1c += 1
         if j < weights[i]:
-            val = MFKnapsackHASH(i - 1, j)
+            value = MFKnapsackHASH(i - 1, j)
         else:
             top = MFKnapsackHASH(i - 1, j)
-            tmp = hash.find(i-1, j - weights[i])
-            exclusive = values[i] + MFKnapsackHASH(i - 1, j - weights[i])
-            val = max(top, exclusive)
-        insertNode = Node(i, j, val)
-        insertNode.isIn = True
-        hash.insert(insertNode)
-
+            inclusive = values[i] + MFKnapsackHASH(i - 1, j - weights[i])
+            value = max(top, inclusive)
+        hash.insert(Node(i, j, value))
     return hash.find(i, j).v
+
+
+#
+
 
 
 def oneCKnapSack():
@@ -339,6 +337,33 @@ print("(2a) Greedy Approach Optimal value:" + print2AContributers())
 
 
 print('')
+
+
+array = [7.0, 3.0, 9.0, 12.0, 6.0, 31.0, 2.0]
+
+# for i in range(len(array)-1, -1, -1):
+#     print(array[i])
+
+#
+mH = MaxHeap(array, len(array), len(array))
+
+mH.heapification()
+
+mH.deleteMax()
+
+print(array)
+#
+# print(array)
+
+
+
+
+
+
+
+
+
+
 
 
 
