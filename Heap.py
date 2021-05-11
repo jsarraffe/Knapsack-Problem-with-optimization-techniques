@@ -3,8 +3,8 @@ class MaxHeap:
         self.H = heap
 
         self.n = n
-        #how man elements after deleting
-        # self.n = self.n
+        self.basicOperation = 0
+
 
     def deleteMax(self):
         self.H[1] = self.H[self.n]
@@ -16,10 +16,12 @@ class MaxHeap:
         while heap != True and 2 * k <= self.n:
             j = 2 * k
             #siftdown
+            self.basicOperation += 1
             if j < self.n:
-                if self.H[j] < self.H[j + 1]:
+                self.basicOperation += 1
+                if self.H[j].bangForBuckRatio < self.H[j + 1].bangForBuckRatio:
                     j = j + 1
-            if v >= self.H[j]:
+            if v.bangForBuckRatio >= self.H[j].bangForBuckRatio:
                 heap = True
             else:
                 self.H[k] = self.H[j]
@@ -35,10 +37,12 @@ class MaxHeap:
             while heap != True and 2 * k <= self.n:
                 j = 2 * k
                 # siftdown
+                self.basicOperation += 1
                 if j < self.n:
-                    if self.H[j] < self.H[j+1]:
+                    self.basicOperation += 1
+                    if self.H[j].bangForBuckRatio < self.H[j+1].bangForBuckRatio:
                         j = j + 1
-                if v >= self.H[j]:
+                if v.bangForBuckRatio >= self.H[j].bangForBuckRatio:
                         heap = True
                 else:
                     self.H[k] = self.H[j]

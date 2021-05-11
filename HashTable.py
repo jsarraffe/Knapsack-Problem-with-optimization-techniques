@@ -4,8 +4,9 @@ class HshTable:
     def __init__(self, n, W):
         self.n = n
         self.W = W
-        self.k = int((((self.W + 1)*0.8) / n))
+        self.k = int((((self.W + 1)* n) / 2))
         self.table = [None] * int(self.k)
+        self.basicOperation = 0
 
 
 #2021626
@@ -17,32 +18,36 @@ class HshTable:
 
     def insert(self, Node):
         index = int(self.hash(Node.i, Node.j))
-        if(Node.isIn):
-            return
+
         node = self.table[index]
+        self.basicOperation += 1
         if node == None:
             self.table[index] = Node
             return
         prev = node
         while node is not None:
+            self.basicOperation += 1
             prev = node
             node = node.next
         prev.next = Node
 
+
+
     def find(self, i, j):
 
 
-
+        if i <= 0:
+            return 0
         index = int(self.hash(i, j))
-
-
         node = self.table[index]
         while node is not None and (node.i != i or node.j != j):
+            self.basicOperation += 1
             node = node.next
+        self.basicOperation += 1
         if node is None:
-            return Node(0,0,0)
+            return None
         else:
-            return node
+            return node.v
 
 class Node:
     def __init__(self, i, j, v):
@@ -50,4 +55,3 @@ class Node:
         self.j = j
         self.v = v
         self.next = None
-        self.isIn = False

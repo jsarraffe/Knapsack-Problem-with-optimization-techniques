@@ -5,3 +5,28 @@ for i in sackValuesForHeap:
     heap.append(round((i.bangForBuckRatio),2))
     n = {i.bangForBuckRatio : i}
     nodesToDeleteFrom.update(n)
+
+
+
+
+    def greeKnapsackMaxheap():
+    global sackValues
+
+    greedNodes = sackValues.copy()
+    mH = MaxHeap(greedNodes, len(greedNodes))
+    mH.heapification()
+    print(greedNodes)
+    mH.deleteMax()
+    print(greedNodes)
+
+
+greeKnapsackMaxheap()
+#
+
+
+
+
+for j in range(capacity[0]):
+    hash.insert(Node(0,j,0))
+for i in range(len(values)):
+    hash.insert(Node(i,0,0))

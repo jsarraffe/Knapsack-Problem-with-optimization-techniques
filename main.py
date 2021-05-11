@@ -1,12 +1,10 @@
 import matplotlib.pyplot as plt
 
 import time
-
 from HashTable import HshTable
-
 from Greedy import SackNode
 from HashTable import Node
-
+import sys
 from Heap import MaxHeap
 
 
@@ -28,13 +26,19 @@ capacity = []
 values = [0]
 weights = [0]
 
-readFile('p00_c.txt', capacity)
-readFile('p00_v.txt', values)
-readFile('p00_w.txt', weights)
 
+x = int(sys.argv[1])
+
+
+def readAndPopulateGlobalVariablesu():
+    readFile('p' + '%0.2d' % int(sys.argv[1]) + '_c.txt', capacity)
+    readFile('p' + '%0.2d' % int(sys.argv[1]) + '_v.txt', values)
+    readFile('p' + '%0.2d' % int(sys.argv[1]) + '_w.txt', weights)
+# ---------------------------------------------------------------------------------------
+
+readAndPopulateGlobalVariablesu()
 oneAtable = [[0 for j in range(capacity[0] + 1)] for i in range(1, len(values) + 1)]
 oneBTable = [[0 for j in range(capacity[0] + 1)] for i in range(1, len(values) + 1)]
-# ---------------------------------------------------------------------------------------
 
 # initilize table, except row 0, column 0
 for i in range(1, len(oneBTable)):
@@ -82,9 +86,8 @@ basicOperation1b = 0
 def MFKnapsack(i, j):
     global basicOperation1b
     global oneBTable
-
+    basicOperation1b += 1
     if oneBTable[i][j] < 0:
-        basicOperation1b += 1
         if j < weights[i]:
             value = MFKnapsack(i - 1, j)
         else:
@@ -128,24 +131,29 @@ hash = HshTable(len(values) - 1, capacity[0])
 val = 0
 
 
+
 # --------------------------------------------------------------------------------------------
+
+for j in range(capacity[0]):
+    hash.insert(Node(0,j,0))
+for i in range(len(values)):
+    hash.insert(Node(i,0,0))
 
 def MFKnapsackHASH(i, j):
     global basicOperation1c
     global hash
     global spaceTaken
-    if i > 0:
-        basicOperation1c += 1
+
+    basicOperation1c += 1
+    tmp = hash.find(i,j)
+    if tmp == None:
         if j < weights[i]:
             value = MFKnapsackHASH(i - 1, j)
         else:
-            top = MFKnapsackHASH(i - 1, j)
-            inclusive = values[i] + MFKnapsackHASH(i - 1, j - weights[i])
-            value = max(top, inclusive)
+            value = max(MFKnapsackHASH(i - 1, j),values[i] + MFKnapsackHASH(i - 1, j - weights[i]))
         hash.insert(Node(i, j, value))
-    return hash.find(i, j).v
-
-
+        spaceTaken += 1
+    return hash.find(i, j)
 #
 
 
@@ -165,8 +173,7 @@ def oneCKnapSack():
     # Back Trace
     while i > 0:
         basicOperation1c += 1
-        if hash.find(i - 1, j).v < hash.find(i, j).v:
-            spaceTaken += 1
+        if hash.find(i - 1, j) < hash.find(i, j):
             knapVal += values[i]
             answer.append(i)
             j = j - weights[i]
@@ -176,48 +183,14 @@ def oneCKnapSack():
     result = answer[::-1]
 
     nonUsedNodes = 0
-    return result, knapVal, basicOperation1c, (spaceTaken, nonUsedNodes)
-
-
-startC = time.time()
-oneC, oneCVal, basicOp1C, oneCSpace = oneCKnapSack()
-endC = time.time()
-
-startA = time.time()
-oneA, oneAVal, basicOp1A = knapsack()
-endA = time.time()
-
-startB = time.time()
-oneB, oneBVal, basicOp1B = oneBKnapSack()
-endB = time.time()
-
-print("Knapsack Capcity = " + str(capacity[0]) + ". Total number of items = " + str(len(values) - 1))
-print("")
-
-print("TIME TO COMPILE  A: " + str(endA - startA))
-
-print("(1a) Traditional Dynamic Programming Optimal value: " + str(oneAVal))
-print("(1a) Traditional Dynamic Programming Optimal subset: {" + str(oneA)[1:-1] + "}")
-print("(1a) Traditional Dynamic Programming Total Basic Ops: " + str(basicOp1A))
-
-print("")
-
-print("TIME TO COMPILE  B: " + str(endB - startB))
-print("(1b) Traditional Dynamic Programming Optimal value: " + str(oneBVal))
-print("(1b) Traditional Dynamic Programming Optimal subset: {" + str(oneB)[1:-1] + "}")
-print("(1b) Traditional Dynamic Programming Total Basic Ops: " + str(basicOp1B))
-
-print("")
-print("TIME TO COMPILE  C: " + str(endC - startC))
-print("(1c) Traditional Dynamic Programming Optimal value: " + str(oneCVal))
-print("(1c) Traditional Dynamic Programming Optimal subset: {" + str(oneC)[1:-1] + "}")
-print("(1c) Traditional Dynamic Programming Total Basic Ops: " + str(basicOp1C))
-print("(1c) Space-efficient Dynamic Programming Space Taken: " + str(oneCSpace[0]) + "  keys and "
-      + str(oneCSpace[1]) + " open spaces in hash table")
+    return result, knapVal, basicOperation1c + hash.basicOperation, spaceTaken
 
 
 # Paremeter gnskVals : greetyKnapSackValues
 def mergesort(gnskVals):
+    global basicOp2A
+
+    basicOp2A += 1
     if len(gnskVals) < 2:
         return
     mid = len(gnskVals) // 2
@@ -231,6 +204,7 @@ def mergesort(gnskVals):
     t = 0
     j = 0
     while i < lSize and t < rSize:
+        basicOp2A += 1
         if left[i].bangForBuckRatio <= right[t].bangForBuckRatio:
             gnskVals[j] = left[i]
             i += 1
@@ -248,15 +222,16 @@ def mergesort(gnskVals):
         t += 1
         j += 1
 
-
 # -------------Greedy Algorithms---------------------------------
 
 sackValues = []
-
-
+basicOp2A = 0
 # --------------------------------------------------------
 def grdyNAPSK():
+    #for heap based
     global sackValues
+    global basicOp2A
+
     greedyKnapSackValues = []
     for i in range(1, len(weights)):
         newNode = SackNode(values[i], weights[i], i, values[i] / weights[i])
@@ -271,6 +246,7 @@ def grdyNAPSK():
     currCapcity = 0
     knapVal = 0
     for i in range(len(greedyKnapSackValues)):
+        basicOp2A += 1
         if currCapcity + greedyKnapSackValues[i].weight < capacity[0]:
             answer.append(greedyKnapSackValues[i].itemNum)
             currCapcity += greedyKnapSackValues[i].weight
@@ -278,14 +254,11 @@ def grdyNAPSK():
         else:
             answer.sort()
             break
-    return answer, knapVal
+    return answer, knapVal, basicOp2A
 
 
-twoA, knapVal2A = grdyNAPSK()
 
-
-def print2AContributers():
-    global twoA
+def printContributers(twoA):
     ans = ""
     for i in range(len(twoA)):
         if (i < len(twoA) - 1):
@@ -295,54 +268,90 @@ def print2AContributers():
     return " {" + ans + "}"
 
 
-def sift(sackNode):
-    print("sackNOde")
 
 
-def heapify(sackValues):
-    print("arsehole")
 
-
-def greedyHeap():
+#------------------global values ----------------------------
+    basicOp2B = 0
+def greedKnapsackMaxheap():
+    global basicOp2B
     global sackValues
+    greedNodes = sackValues.copy()
+    answer = []
+    mH = MaxHeap(greedNodes, len(greedNodes))
+    mH.heapification()
+    currCap = 0
+    knapVal = 0
+    for i in range(1, len(greedNodes)):
+        if currCap +  mH.H[1].weight < capacity[0]:
+            answer.append(mH.H[1].itemNum)
+            currCap += mH.H[1].weight
+            knapVal += mH.H[1].value
+            mH.deleteMax()
 
-    '''
-
-       1: heapify
-       2: delete max, the sift down,  switch with the last node in array, then delete last node, then sift
-
-    '''
-
-
-print(" ")
-
-greedyHeap()
-print("(2a) Greedy Approach Optimal value: " + str(knapVal2A))
-print("(2a) Greedy Approach Optimal value:" + print2AContributers())
-
-print('')
-
-# array = [7.0, 3.0, 9.0, 12.0, 6.0, 31.0, 2.0]
+    answer.sort()
+    return answer, knapVal + mH.basicOperation
 
 
-nodesToDeleteFrom = {}
-heap = []
-for i in sackValues:
-    heap.append(round((i.bangForBuckRatio),2))
-    n = {i.bangForBuckRatio : i}
-    nodesToDeleteFrom.update(n)
-
-print(heap)
-array = heap
-
-greedNodes = sackValues.copy()
-
-mH = MaxHeap(array, len(array))
-mH.heapification()
 
 
-print(array)
 
 
-#
-# print(array)
+
+
+
+
+def main():
+    print(sys.argv[1])
+
+    oneC, oneCVal, basicOp1C, oneCSpace = oneCKnapSack()
+    startA = time.time()
+    oneA, oneAVal, basicOp1A = knapsack()
+    startB = time.time()
+    oneB, oneBVal, basicOp1B = oneBKnapSack()
+
+    print("Knapsack Capcity = " + str(capacity[0]) + ". Total number of items = " + str(len(values) - 1))
+    print("")
+
+    # print("TIME TO COMPILE  A: " + str(endA - startA) + ' SECONDS')
+    # print("---------------------------------------------------------------------")
+    print("")
+    print(" (1a) Traditional Dynamic Programming Optimal value: " + str(oneAVal))
+    print(" (1a) Traditional Dynamic Programming Optimal subset: {" + str(oneA)[1:-1] + "}")
+    print(" (1a) Traditional Dynamic Programming Total Basic Ops: " + str(basicOp1A))
+
+    # print("")
+    #
+    # print("TIME TO COMPILE  B: " + str(endB - startB)+ ' SECONDS')
+    print("")
+    print(" (1b) Memory-function Dynamic Programming Optimal value: " + str(oneBVal))
+    print(" (1b) Memory-function Dynamic Programming Optimal subset: {" + str(oneB)[1:-1] + "}")
+    print(" (1b) Memory-function Dynamic Programming Total Basic Ops: " + str(basicOp1B))
+
+    # print("")
+    # print("TIME TO COMPILE  C: " + str(endC - startC)+ ' SECONDS')
+    print("")
+    print(" (1c) Traditional Dynamic Programming Optimal value: " + str(oneCVal))
+    print(" (1c) Traditional Dynamic Programming Optimal subset: {" + str(oneC)[1:-1] + "}")
+    print(" (1c) Traditional Dynamic Programming Total Basic Ops: " + str(basicOp1C))
+    print(" (1c) Space-efficient Dynamic Programming Space Taken: " + str(oneCSpace) + "  keys ")
+
+    print("")
+
+    twoA, knapVal2A, basicOp2A = grdyNAPSK()
+    twoB, knapVal2B = greedKnapsackMaxheap()
+
+    print(" (2a) Greedy Approach Optimal value: " + str(knapVal2A))
+    print(" (2a) Greedy Approach Optimal value:" + printContributers(twoA))
+    print(" (2a) Greedy Approach Total Basic Ops: " + str(basicOp2A))
+
+    print(" ")
+
+    print(" (2b) Heap-based Greedy Approach Optimal value: " + str(knapVal2A))
+    print(" (2b) Heap-based Greedy Approach Optimal subset:" + printContributers(twoB))
+    print(" (2b) Heap-based Greedy Approach Total Basic Ops: " + str(knapVal2B))
+
+
+if __name__ == "__main__":
+    main()
+
