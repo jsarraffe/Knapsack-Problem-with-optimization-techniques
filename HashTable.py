@@ -25,6 +25,8 @@ class HshTable:
             self.table[index] = Node
             return
         prev = node
+
+        self.basicOperation += 1
         while node is not None:
             self.basicOperation += 1
             prev = node
@@ -40,9 +42,13 @@ class HshTable:
             return 0
         index = int(self.hash(i, j))
         node = self.table[index]
+
+        self.basicOperation += 1
         while node is not None and (node.i != i or node.j != j):
             self.basicOperation += 1
             node = node.next
+
+
         self.basicOperation += 1
         if node is None:
             return None

@@ -18,7 +18,6 @@ class MaxHeap:
             #siftdown
             self.basicOperation += 1
             if j < self.n:
-                self.basicOperation += 1
                 if self.H[j].bangForBuckRatio < self.H[j + 1].bangForBuckRatio:
                     j = j + 1
             if v.bangForBuckRatio >= self.H[j].bangForBuckRatio:
@@ -34,12 +33,13 @@ class MaxHeap:
             k = i
             v = self.H[k]
             heap = False
+
+            self.basicOperation += 1
             while heap != True and 2 * k <= self.n:
                 j = 2 * k
                 # siftdown
                 self.basicOperation += 1
                 if j < self.n:
-                    self.basicOperation += 1
                     if self.H[j].bangForBuckRatio < self.H[j+1].bangForBuckRatio:
                         j = j + 1
                 if v.bangForBuckRatio >= self.H[j].bangForBuckRatio:

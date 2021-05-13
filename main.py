@@ -25,8 +25,6 @@ def readFile(filename, array):
 capacity = []
 values = [0]
 weights = [0]
-
-
 x = int(sys.argv[1])
 
 
@@ -108,7 +106,6 @@ def oneBKnapSack():
     j = len(oneBTable[0]) - 1
     knapVal = 0
     answer = []
-
     # Back Trace
     while i != 0:
         basicOperation1b += 1
@@ -145,8 +142,8 @@ def MFKnapsackHASH(i, j):
     global spaceTaken
 
     basicOperation1c += 1
-    tmp = hash.find(i,j)
-    if tmp == None:
+    # tmp = hash.find(i,j)
+    if hash.find(i,j) == None:
         if j < weights[i]:
             value = MFKnapsackHASH(i - 1, j)
         else:
@@ -267,14 +264,10 @@ def printContributers(twoA):
             ans += str(twoA[i]) + ""
     return " {" + ans + "}"
 
-
-
-
-
 #------------------global values ----------------------------
-    basicOp2B = 0
+
 def greedKnapsackMaxheap():
-    global basicOp2B
+    basicOp2B = 0
     global sackValues
     greedNodes = sackValues.copy()
     answer = []
@@ -283,6 +276,7 @@ def greedKnapsackMaxheap():
     currCap = 0
     knapVal = 0
     for i in range(1, len(greedNodes)):
+        basicOp2B += 1
         if currCap +  mH.H[1].weight < capacity[0]:
             answer.append(mH.H[1].itemNum)
             currCap += mH.H[1].weight
@@ -290,29 +284,72 @@ def greedKnapsackMaxheap():
             mH.deleteMax()
 
     answer.sort()
-    return answer, knapVal + mH.basicOperation
+    mH.basicOperation += basicOp2B
+    return answer, knapVal, mH.basicOperation + basicOp2B
 
 
+def graphs():
+    caseID = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+    report1A = [24, 1660, 135, 1146, 357, 840, 1197, 11265, 153700344]
+    report1B = [26, 310, 49, 89, 168, 281, 147, 6130, 13029236]
+    report1C = [156, 2589, 307, 691, 1101, 2421, 1033, 43021, 66639411]
+    space1C = []
+    report2A = [15, 43, 20, 23, 27, 30, 29, 76, 146]
+    report2B = [15, 39, 16, 21, 23, 28, 25, 64, 122]
 
 
+    fig1A = plt.figure()
+    superscript = str.maketrans("2", "²")
+    plt.plot(caseID, report1A, "bo")
+    fig1A .suptitle('Task 1a: Dynamic Programming (traditional) approach', fontsize=15)
+    plt.xlabel('CaseID', fontsize=18)
+    plt.ylabel('# basicOperations', fontsize=16)
+    plt.legend(["1A", "1B"])
+    plt.xlabel('CaseID', fontsize=18)
+    plt.ylabel('# of basic Operations', fontsize=14)
+    plt.legend(["C(k) ∈ ϴ(nW)"])
+    plt.show()
 
+    fig1B = plt.figure()
+    plt.plot(caseID, report1B, "ro")
+    fig1B.suptitle('Task 1b: Memory function based Dynamic Programming approach', fontsize=12)
+    plt.xlabel('CaseID', fontsize=18)
+    plt.ylabel('# basicOperations', fontsize=16)
+    plt.legend(["C(k) ∈ ϴ(nW)"])
+    plt.show()
 
+    fig2A = plt.figure()
+    plt.plot(caseID, report2A, "bo")
+    fig2A.suptitle('Task 2a: Greedy approach using sorting', fontsize=15)
+    plt.xlabel('CaseID', fontsize=18)
+    plt.ylabel('# basicOperations', fontsize=16)
+    plt.legend(["C(k) ∈ ϴ(nlogn)"])
+    plt.show()
 
+    fig2B = plt.figure()
+    plt.plot(caseID, report2B, "bo")
+    fig2B.suptitle('Task 2b: Greedy approach using max-heap', fontsize=15)
+    plt.xlabel('CaseID', fontsize=18)
+    plt.ylabel('# basicOperations', fontsize=16)
+    plt.legend(["C(k) ∈ ϴ(nlogn)"])
+    plt.show()
 
 
 
 def main():
-    print(sys.argv[1])
+
+
+    graphs()
+
 
     oneC, oneCVal, basicOp1C, oneCSpace = oneCKnapSack()
-    startA = time.time()
     oneA, oneAVal, basicOp1A = knapsack()
-    startB = time.time()
     oneB, oneBVal, basicOp1B = oneBKnapSack()
 
     print("Knapsack Capcity = " + str(capacity[0]) + ". Total number of items = " + str(len(values) - 1))
-    print("")
 
+    #
     # print("TIME TO COMPILE  A: " + str(endA - startA) + ' SECONDS')
     # print("---------------------------------------------------------------------")
     print("")
@@ -339,7 +376,7 @@ def main():
     print("")
 
     twoA, knapVal2A, basicOp2A = grdyNAPSK()
-    twoB, knapVal2B = greedKnapsackMaxheap()
+    twoB, knapVal2B, bo2B  = greedKnapsackMaxheap()
 
     print(" (2a) Greedy Approach Optimal value: " + str(knapVal2A))
     print(" (2a) Greedy Approach Optimal value:" + printContributers(twoA))
@@ -347,9 +384,9 @@ def main():
 
     print(" ")
 
-    print(" (2b) Heap-based Greedy Approach Optimal value: " + str(knapVal2A))
+    print(" (2b) Heap-based Greedy Approach Optimal value: " + str(knapVal2B))
     print(" (2b) Heap-based Greedy Approach Optimal subset:" + printContributers(twoB))
-    print(" (2b) Heap-based Greedy Approach Total Basic Ops: " + str(knapVal2B))
+    print(" (2b) Heap-based Greedy Approach Total Basic Ops: " + str(bo2B))
 
 
 if __name__ == "__main__":
