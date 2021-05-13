@@ -4,9 +4,10 @@ class HshTable:
     def __init__(self, n, W):
         self.n = n
         self.W = W
-        self.k = int((((self.W + 1)* n) / 2))
+        self.k = int((((self.W + 1)* n) *0.677))
         self.table = [None] * int(self.k)
         self.basicOperation = 0
+        self.freespace = self.k
 
 
 #2021626
@@ -22,6 +23,7 @@ class HshTable:
         node = self.table[index]
         self.basicOperation += 1
         if node == None:
+            self.freespace -= 1
             self.table[index] = Node
             return
         prev = node

@@ -180,7 +180,7 @@ def oneCKnapSack():
     result = answer[::-1]
 
     nonUsedNodes = 0
-    return result, knapVal, basicOperation1c + hash.basicOperation, spaceTaken
+    return result, knapVal, basicOperation1c + hash.basicOperation, (spaceTaken, hash.freespace)
 
 
 # Paremeter gnskVals : greetyKnapSackValues
@@ -294,7 +294,9 @@ def graphs():
     report1A = [24, 1660, 135, 1146, 357, 840, 1197, 11265, 153700344]
     report1B = [26, 310, 49, 89, 168, 281, 147, 6130, 13029236]
     report1C = [156, 2589, 307, 691, 1101, 2421, 1033, 43021, 66639411]
-    space1C = []
+
+    report1BSpaceTaken = [25,1815,156, 1330,400,936,1360,12000, 13029236]
+    space1C =            [13,994,100, 714,216,507,783,7596,64534672]
     report2A = [15, 43, 20, 23, 27, 30, 29, 76, 146]
     report2B = [15, 39, 16, 21, 23, 28, 25, 64, 122]
 
@@ -319,6 +321,32 @@ def graphs():
     plt.legend(["C(k) ∈ ϴ(nW)"])
     plt.show()
 
+    # fig1BExtraCredit = plt.figure()
+    # plt.plot(caseID, report1B, "ro")
+    # fig1B.suptitle('Task 1b: Memory function based Dynamic Programming approach', fontsize=12)
+    # plt.xlabel('CaseID', fontsize=18)
+    # plt.ylabel('# basicOperations', fontsize=16)
+    # plt.legend(["C(k) ∈ ϴ(nW)"])
+    # plt.show()
+
+    fig1BExtraCredit = plt.figure()
+    plt.plot(report1BSpaceTaken, report1B, "ro")
+    fig1BExtraCredit.suptitle('Space vs time for 1B', fontsize=12)
+    plt.xlabel('space', fontsize=18)
+    plt.ylabel('# basicOperations', fontsize=16)
+    plt.legend(["C(k) ∈ ϴ(nW)"])
+    plt.show()
+
+
+    fig1CExtraCredit = plt.figure()
+    plt.plot(space1C, report1C, "bo")
+    fig1CExtraCredit.suptitle('Space vs time for 1C', fontsize=12)
+    plt.xlabel('space', fontsize=18)
+    plt.ylabel('# basicOperations', fontsize=16)
+    plt.legend(["C(k) ∈ ϴ(nW)"])
+    plt.show()
+
+
     fig2A = plt.figure()
     plt.plot(caseID, report2A, "bo")
     fig2A.suptitle('Task 2a: Greedy approach using sorting', fontsize=15)
@@ -334,6 +362,12 @@ def graphs():
     plt.ylabel('# basicOperations', fontsize=16)
     plt.legend(["C(k) ∈ ϴ(nlogn)"])
     plt.show()
+
+
+
+
+
+
 
 
 
@@ -366,15 +400,19 @@ def main():
     print(" (1b) Memory-function Dynamic Programming Total Basic Ops: " + str(basicOp1B))
 
     # print("")
-    # print("TIME TO COMPILE  C: " + str(endC - startC)+ ' SECONDS')
+    # # print("TIME TO COMPILE  C: " + str(endC - startC)+ ' SECONDS')
     print("")
     print(" (1c) Traditional Dynamic Programming Optimal value: " + str(oneCVal))
     print(" (1c) Traditional Dynamic Programming Optimal subset: {" + str(oneC)[1:-1] + "}")
     print(" (1c) Traditional Dynamic Programming Total Basic Ops: " + str(basicOp1C))
-    print(" (1c) Space-efficient Dynamic Programming Space Taken: " + str(oneCSpace) + "  keys ")
+    print(" (1c) Space-efficient Dynamic Programming Space Taken: " + str(oneCSpace[0]) + "  keys " + str(oneCSpace[1]) + " free spaces in hash array")
+
 
     print("")
 
+    print("Total Space taken by the Task1B: " + str(len(values) * capacity[0]))
+    print(" A total of " + " 1Cspace taken: " + str(oneCSpace[0] + oneCSpace[1]))
+    print("")
     twoA, knapVal2A, basicOp2A = grdyNAPSK()
     twoB, knapVal2B, bo2B  = greedKnapsackMaxheap()
 
