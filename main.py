@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt
-
-import time
 from HashTable import HshTable
 from Greedy import SackNode
 from HashTable import Node
@@ -29,9 +27,16 @@ x = int(sys.argv[1])
 
 
 def readAndPopulateGlobalVariablesu():
-    readFile('p' + '%0.2d' % int(sys.argv[1]) + '_c.txt', capacity)
-    readFile('p' + '%0.2d' % int(sys.argv[1]) + '_v.txt', values)
-    readFile('p' + '%0.2d' % int(sys.argv[1]) + '_w.txt', weights)
+    c = 'p' + '%0.2d' % int(sys.argv[1]) + '_c.txt'
+    v = 'p' + '%0.2d' % int(sys.argv[1]) + '_v.txt'
+    w = 'p' + '%0.2d' % int(sys.argv[1]) + '_w.txt'
+
+    readFile(c, capacity)
+    readFile(v, values)
+    readFile(w, weights)
+
+    print("File containing the capacity, weights, and values are: " + c + ", " + w + ", and " + v)
+    print("")
 # ---------------------------------------------------------------------------------------
 
 readAndPopulateGlobalVariablesu()
@@ -200,6 +205,7 @@ def mergesort(gnskVals):
     i = 0
     t = 0
     j = 0
+    #MERGE
     while i < lSize and t < rSize:
         basicOp2A += 1
         if left[i].bangForBuckRatio <= right[t].bangForBuckRatio:
@@ -290,77 +296,53 @@ def greedKnapsackMaxheap():
 
 def graphs():
     caseID = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-
     report1A = [24, 1660, 135, 1146, 357, 840, 1197, 11265, 153700344]
     report1B = [26, 310, 49, 89, 168, 281, 147, 6130, 13029236]
-    report1C = [156, 2589, 307, 691, 1101, 2421, 1033, 43021, 66639411]
+    report1C = [140, 1681, 632,1080, 950, 1453, 1476, 34228, 64534672]
 
-    report1BSpaceTaken = [25,1815,156, 1330,400,936,1360,12000, 13029236]
-    space1C =            [13,994,100, 714,216,507,783,7596,64534672]
+    report1BSpaceTaken = [25,1815,156, 1330,400,936,1360,12000, 160104500]
+    space1C = [13,994,100, 714,216,507,783,7596,98502025]
     report2A = [15, 43, 20, 23, 27, 30, 29, 76, 146]
     report2B = [15, 39, 16, 21, 23, 28, 25, 64, 122]
 
 
     fig1A = plt.figure()
     superscript = str.maketrans("2", "²")
-    plt.plot(caseID, report1A, "bo")
-    fig1A .suptitle('Task 1a: Dynamic Programming (traditional) approach', fontsize=15)
-    plt.xlabel('CaseID', fontsize=18)
-    plt.ylabel('# basicOperations', fontsize=16)
-    plt.legend(["1A", "1B"])
-    plt.xlabel('CaseID', fontsize=18)
-    plt.ylabel('# of basic Operations', fontsize=14)
-    plt.legend(["C(k) ∈ ϴ(nW)"])
-    plt.show()
 
-    fig1B = plt.figure()
+
+    fig1A .suptitle('(Traditional) vs (Memory-function)', fontsize=15)
+
+
+    plt.scatter(caseID, report1A, s=80)
+    # plt.scatter(caseID, report1A, s=112, alpha = 0)
     plt.plot(caseID, report1B, "ro")
-    fig1B.suptitle('Task 1b: Memory function based Dynamic Programming approach', fontsize=12)
     plt.xlabel('CaseID', fontsize=18)
-    plt.ylabel('# basicOperations', fontsize=16)
-    plt.legend(["C(k) ∈ ϴ(nW)"])
+    plt.ylabel('# of basic operations', fontsize=16)
+    plt.legend(["Task 1B: Memory-function", "Task 1A: Traditional"])
+    plt.xlabel('CaseID', fontsize=18)
+
     plt.show()
 
-    # fig1BExtraCredit = plt.figure()
-    # plt.plot(caseID, report1B, "ro")
-    # fig1B.suptitle('Task 1b: Memory function based Dynamic Programming approach', fontsize=12)
-    # plt.xlabel('CaseID', fontsize=18)
-    # plt.ylabel('# basicOperations', fontsize=16)
-    # plt.legend(["C(k) ∈ ϴ(nW)"])
-    # plt.show()
-
-    fig1BExtraCredit = plt.figure()
-    plt.plot(report1BSpaceTaken, report1B, "ro")
-    fig1BExtraCredit.suptitle('Space vs time for 1B', fontsize=12)
-    plt.xlabel('space', fontsize=18)
-    plt.ylabel('# basicOperations', fontsize=16)
-    plt.legend(["C(k) ∈ ϴ(nW)"])
-    plt.show()
 
 
     fig1CExtraCredit = plt.figure()
-    plt.plot(space1C, report1C, "bo")
-    fig1CExtraCredit.suptitle('Space vs time for 1C', fontsize=12)
+    plt.plot(space1C, report1C, "ro")
+    plt.scatter(report1BSpaceTaken, report1B, s=70)
+    fig1CExtraCredit.suptitle('(Space-efficient) vs (Memory-function)', fontsize=12)
     plt.xlabel('space', fontsize=18)
-    plt.ylabel('# basicOperations', fontsize=16)
-    plt.legend(["C(k) ∈ ϴ(nW)"])
+    plt.ylabel('# of basic operations', fontsize=16)
+    plt.legend([ "Task1C: Space-efficient", "Task1B: Memory-function"])
+
     plt.show()
 
 
     fig2A = plt.figure()
-    plt.plot(caseID, report2A, "bo")
-    fig2A.suptitle('Task 2a: Greedy approach using sorting', fontsize=15)
+    plt.scatter(caseID, report2B, s=50)
+    plt.plot(caseID, report2A, "ro")
+    fig2A.suptitle('Greedy approach (Sorting) vs (Max-heap)', fontsize=15)
     plt.xlabel('CaseID', fontsize=18)
-    plt.ylabel('# basicOperations', fontsize=16)
-    plt.legend(["C(k) ∈ ϴ(nlogn)"])
-    plt.show()
-
-    fig2B = plt.figure()
-    plt.plot(caseID, report2B, "bo")
-    fig2B.suptitle('Task 2b: Greedy approach using max-heap', fontsize=15)
-    plt.xlabel('CaseID', fontsize=18)
-    plt.ylabel('# basicOperations', fontsize=16)
-    plt.legend(["C(k) ∈ ϴ(nlogn)"])
+    plt.ylabel('# of basic operations', fontsize=16)
+    plt.legend(["Task 2A: Sorting", "Task 2B: Max-heap"])
     plt.show()
 
 
@@ -374,7 +356,7 @@ def graphs():
 def main():
 
 
-    graphs()
+    # graphs()
 
 
     oneC, oneCVal, basicOp1C, oneCSpace = oneCKnapSack()
@@ -399,25 +381,28 @@ def main():
     print(" (1b) Memory-function Dynamic Programming Optimal subset: {" + str(oneB)[1:-1] + "}")
     print(" (1b) Memory-function Dynamic Programming Total Basic Ops: " + str(basicOp1B))
 
-    # print("")
     # # print("TIME TO COMPILE  C: " + str(endC - startC)+ ' SECONDS')
     print("")
-    print(" (1c) Traditional Dynamic Programming Optimal value: " + str(oneCVal))
-    print(" (1c) Traditional Dynamic Programming Optimal subset: {" + str(oneC)[1:-1] + "}")
-    print(" (1c) Traditional Dynamic Programming Total Basic Ops: " + str(basicOp1C))
+    print(" (1c) Space-efficient Dynamic Programming Optimal value:  " + str(oneCVal))
+    print(" (1c) Space-efficient Dynamic Programming Optimal subset: {" + str(oneC)[1:-1] + "}")
+    print(" (1c) Space-efficient Dynamic Programming Total Basic Ops: " + str(basicOp1C))
     print(" (1c) Space-efficient Dynamic Programming Space Taken: " + str(oneCSpace[0]) + "  keys " + str(oneCSpace[1]) + " free spaces in hash array")
 
-
     print("")
 
-    print("Total Space taken by the Task1B: " + str(len(values) * capacity[0]))
-    print(" A total of " + " 1Cspace taken: " + str(oneCSpace[0] + oneCSpace[1]))
-    print("")
+    #TO SEE TOTAL SAPCE TAKEN UP
+    # print("")
+    # print("Total Space taken by the Task1B: " + str(len(values) * capacity[0]))
+    # print(" A total of " + " 1Cspace taken: " + str(oneCSpace[0] + oneCSpace[1]))
+    # print("")
+
+
+
     twoA, knapVal2A, basicOp2A = grdyNAPSK()
     twoB, knapVal2B, bo2B  = greedKnapsackMaxheap()
 
     print(" (2a) Greedy Approach Optimal value: " + str(knapVal2A))
-    print(" (2a) Greedy Approach Optimal value:" + printContributers(twoA))
+    print(" (2a) Greedy Approach Optimal subset: " + printContributers(twoA))
     print(" (2a) Greedy Approach Total Basic Ops: " + str(basicOp2A))
 
     print(" ")

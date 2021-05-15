@@ -10,8 +10,10 @@ class HshTable:
         self.freespace = self.k
 
 
-#2021626
+
     def hash(self, i, j):
+
+
         Ri = '1' + format(i, "b").zfill(int(math.log2(self.n + 1)))
         Rj = format(j, "b").zfill(int(math.log2(self.W + 1)))
         hashIndex = int(Ri + Rj) % self.k
@@ -39,7 +41,6 @@ class HshTable:
 
     def find(self, i, j):
 
-
         if i <= 0:
             return 0
         index = int(self.hash(i, j))
@@ -49,8 +50,6 @@ class HshTable:
         while node is not None and (node.i != i or node.j != j):
             self.basicOperation += 1
             node = node.next
-
-
         self.basicOperation += 1
         if node is None:
             return None
