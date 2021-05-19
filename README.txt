@@ -26,7 +26,7 @@ Instructions to run Code:
 	Solved Knapsack problem using the Traditional Dynamic Programming Approach, Memory Function method, and using the Memory Function using a open cahin hash 		table.
 	
 	A greedy approach sorted based on it's "bank for buck ration" aka value/weight, was also implmented using merge sort.
-	The last approach solves the problem using a max heap, and heapifies it bottom up, and then proceeds to do a variable amount of log(n) operations to find th e		ptimal subset.
+	The last approach solves the problem using a max heap, and heapifies it bottom up, and then proceeds to do a variable amount of log(n) operations to find th 		optimal subset.
 	
 
 
